@@ -66,10 +66,15 @@ class ContentScraper(object):
         headers = {'User-Agent': self.ua.random}
         proxies = {'http': self.proxy, 'https': self.proxy}
 
+        self.logger.info("Making request using URL: ".format(url))
+        self.logger.info("Headers: ")
+        self.logger.info(headers)
+        self.logger.info("Proxies: ")
+        self.logger.info(proxies)
+
         while True:
             try:
                 resp = requests.get(url, headers=headers, proxies=proxies)
-                # resp = requests.get(url, headers=headers)
                 if self._postnotfound(resp.content):
                     self.logger.info('Page not found.')
                     break
@@ -103,10 +108,10 @@ class ContentScraper(object):
         """
         self.logger.info("Writing details back to datastore.")
         ds_client = datastore.Client()
-        # listing_key = ds_client.key("ListingLink", listing["id"])
-        listing_key = ds_client.key("ListingLink", listing["clid"])
+        listing_key = ds_client.key("ListingLink", listing["id"])
         listing_entity = ds_client.get(listing_key)
         listing_entity["content"] = content
         listing_entity["content_acquired"] = True
         listing_entity["content_parsed"] = False
         listing_entity["time_content_acquired"] = datetime.datetime.utcnow()
+        ds_client.put(listing_entity)
