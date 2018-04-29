@@ -32,7 +32,7 @@ class ContentScraper(object):
         self.proxy = os.environ['PROXY']
         self.ua = UserAgent()
         self.sleeplong = 5
-        self.logger.info('ListingScraper initialized.')
+        self.logger.info('ContentScraper initialized.')
 
     def execute(self, listing):
         """Executes a content scrape for the requested zip code and database."""
@@ -101,8 +101,10 @@ class ContentScraper(object):
         :param listing: dict, contains original listing that was processed
         :return:
         """
+        self.logger.info("Writing details back to datastore.")
         ds_client = datastore.Client()
-        listing_key = ds_client.key("ListingLink", listing["id"])
+        # listing_key = ds_client.key("ListingLink", listing["id"])
+        listing_key = ds_client.key("ListingLink", listing["clid"])
         listing_entity = ds_client.get(listing_key)
         listing_entity["content"] = content
         listing_entity["content_acquired"] = True

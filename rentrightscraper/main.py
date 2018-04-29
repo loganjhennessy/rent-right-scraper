@@ -5,12 +5,17 @@ from concurrent import futures
 from google.cloud import pubsub_v1
 
 from rentrightscraper.contentscraper import ContentScraper
+from rentrightscraper.util.log import get_configured_logger
+
+logger = get_configured_logger("rentrightscraper.main")
 
 
 def callback(message):
+    logger.info("Received message: {}".format(message))
     msg = json.loads(message.data.decode("utf-8"))
     contentscraper = ContentScraper()
     contentscraper.execute(msg)
+    logger.info("No errors encountered processing message, acknowleding.")
     message.ack()
 
 

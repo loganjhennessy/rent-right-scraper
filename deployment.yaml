@@ -15,11 +15,6 @@ spec:
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/opt/rent-right-scraper/creds/rent-right-dev.json"
-        - name: BASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: base-url-secret
-              key: BASE_URL
         - name: PROXY
           valueFrom:
             secretKeyRef:
