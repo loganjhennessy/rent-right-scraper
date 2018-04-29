@@ -2,8 +2,16 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: rent-right-scraper-deployment
+  labels:
+    app: rent-right-scraper
 spec:
+  selector:
+    matchLabels:
+      app: rent-right-scraper
   template:
+    metadata:
+      labels:
+        app: rent-right-scraper
     spec:
       containers:
       - name: rent-right-scraper
@@ -15,6 +23,10 @@ spec:
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/opt/rent-right-scraper/creds/rent-right-dev.json"
+        - name: MAX_MESSAGES
+          value: "50"
+        - name: MAX_WORKERS
+          value: "15"
         - name: PROXY
           valueFrom:
             secretKeyRef:
@@ -24,4 +36,3 @@ spec:
       - name: credentials-volume
         secret:
           secretName: credentials-secret
-      restartPolicy: Never
