@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rent-right-scraper-deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: rent-right-scraper
+        image: gcr.io/rent-right-dev/rent-right-scraper:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: credentials-volume
+          mountPath: /opt/rent-right-scraper/creds
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/opt/rent-right-scraper/creds/rent-right-dev.json"
+        - name: BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: base-url-secret
+              key: BASE_URL
+        - name: PROXY
+          valueFrom:
+            secretKeyRef:
+              name: proxy-secret
+              key: PROXY
+      volumes:
+      - name: credentials-volume
+        secret:
+          secretName: credentials-secret
+      restartPolicy: Never
