@@ -2,7 +2,6 @@
 import datetime
 import os
 import requests
-import time
 
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
@@ -31,7 +30,6 @@ class ContentScraper(object):
         self.logger = get_configured_logger(__name__)
         self.proxy = os.environ['PROXY']
         self.ua = UserAgent()
-        self.sleeplong = 5
         self.logger.info('ContentScraper initialized.')
 
     def execute(self, listing):
@@ -68,26 +66,14 @@ class ContentScraper(object):
 
         self.logger.info("Making request using URL: ".format(url))
 
-        while True:
-            try:
-                resp = requests.get(url, headers=headers, proxies=proxies)
-                if self._postnotfound(resp.content):
-                    self.logger.info('Page not found.')
-                    break
-                if resp.status_code != 200:
-                    raise Exception(
-                            'Response contained invalid '
-                            'status code {}'.format(resp.status_code)
-                          )
-                break
-            except Exception as e:
-                self.logger.info('Exception occurred during request.')
-                self.logger.info('{}'.format(e))
-                self.logger.info(
-                    'Sleeping for {} seconds'.format(self.sleeplong)
-                )
-                time.sleep(self.sleeplong)
-                self.logger.info('Retrying')
+        resp = requests.get(url, headers=headers, proxies=proxies)
+        if self._postnotfound(resp.content):
+            self.logger.info('Page not found.')
+        if resp.status_code != 200:
+            raise Exception(
+                'Response contained invalid '
+                'status code {}'.format(resp.status_code)
+            )
 
         return resp.content
 

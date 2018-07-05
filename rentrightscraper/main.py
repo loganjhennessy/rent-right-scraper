@@ -25,7 +25,7 @@ def callback(message):
 
 def main():
     project = "rent-right-dev"
-    subscription_name = "listings"
+    subscription_name = "listings-test"
 
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(project, subscription_name)

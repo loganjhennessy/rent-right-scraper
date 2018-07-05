@@ -24,9 +24,9 @@ spec:
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/opt/rent-right-scraper/creds/rent-right-dev.json"
         - name: MAX_MESSAGES
-          value: "50"
+          value: "40"
         - name: MAX_WORKERS
-          value: "15"
+          value: "20"
         - name: PROXY
           valueFrom:
             secretKeyRef:
